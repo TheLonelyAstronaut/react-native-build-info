@@ -17,6 +17,8 @@ const BuildInfo = NativeModules.BuildInfo
       }
     );
 
-export function multiply(a: number, b: number): Promise<number> {
-  return BuildInfo.multiply(a, b);
+export const getBuildTime = async (): Promise<Date> => {
+  const time = await BuildInfo.getBuildTime();
+
+  return new Date(Platform.OS === 'android' ? Number.parseInt(time) : time);
 }

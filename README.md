@@ -5,22 +5,46 @@ RN build info
 ## Installation
 
 ```sh
-npm install react-native-build-info
+npm install react-native-native-build-info
 ```
 
 ## Usage
 
 ```js
-import { multiply } from "react-native-build-info";
+import { getBuildTime } from "react-native-native-build-info";
 
 // ...
 
-const result = await multiply(3, 7);
+const result = await getBuildTime();
 ```
 
-## Contributing
+## Setup
 
-See the [contributing guide](CONTRIBUTING.md) to learn how to contribute to the repository and the development workflow.
+### Android
+
+add this line to app/android/build.gradle
+
+```
+android {
+  defaultConfig {
+    ...
+    buildConfigField "long", "TIMESTAMP", System.currentTimeMillis() + "L"
+  }
+}
+```
+
+### iOS
+
+add Run Script phase to the very bottom of Build Phases, add script below, clean & rebuild
+
+```
+infoplist="$BUILT_PRODUCTS_DIR/$INFOPLIST_PATH"
+builddate=`date`
+if [[ -n "$builddate" ]]; then
+/usr/libexec/PlistBuddy -c "Add :CFBuildDate $builddate" ${infoplist}
+/usr/libexec/PlistBuddy -c "Set :CFBuildDate $builddate" ${infoplist}
+fi
+```
 
 ## License
 
